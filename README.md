@@ -57,15 +57,18 @@ Alternativa si Streamlit no es reconocido: `python -m streamlit run app.py`
 
 ## Demo online y repositorio
 
-- Demo: [PENDIENTE: URL de Streamlit Community Cloud]
+- Demo: https://demandia-fresh-equipo03.streamlit.app
 - Repositorio: https://github.com/TiagoVald09/AI-2026-2-Equipo03-DemandIA-Fresh
 
 ## Uso de IA
 
-Claude Code fue utilizado como asistente para generar, integrar, revisar y depurar parte del código del proyecto. El equipo revisó, probó y comprende la lógica implementada.
+Claude Code fue utilizado como asistente para generar, integrar, revisar y depurar parte del código y la documentación del proyecto. El equipo revisó, probó y comprende la lógica implementada.
 
 ## Equipo y roles
 
-Santiago Valdivia · Fabian Cristobal · Jesus Camargo · Said Taravay
+- **Santiago Valdivia:** integración, configuración, métricas y documentación.
+- **Fabian Cristobal:** interfaz Streamlit y experiencia de usuario.
+- **Jesus Camargo:** simulación y generación de demanda.
+- **Said Taravay:** lógica y validación de agentes.
 
-Roles y commits de cada integrante: [PENDIENTE: completar según los commits reales del repositorio].
+Los cuatro integrantes realizaron aportes mediante commits y Pull Requests propios en el repositorio.

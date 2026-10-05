@@ -1,6 +1,11 @@
 # Guía de defensa — DemandIA Fresh
 
-Guía para la sustentación oral. Los números son los de la simulación por defecto (30 días, semilla 42).
+Guía para la sustentación oral.
+
+Demo pública: https://demandia-fresh-equipo03.streamlit.app
+Repositorio: https://github.com/TiagoVald09/AI-2026-2-Equipo03-DemandIA-Fresh
+
+Los números son los de la simulación por defecto (30 días, semilla 42).
 
 ## 1. Explicación sencilla del proyecto
 
@@ -54,7 +59,11 @@ Cambia la secuencia de demanda y por tanto los números, pero no la lógica. Mis
 El Avance 1 pide comparar un modo base con técnicas del Bloque 1 (reglas y utilidad). El ML se incorporará en la Parte 2 para predecir la demanda y alimentar al agente de utilidad.
 
 ## 15. Qué código fue generado con IA
-Claude Code ayudó a generar, integrar, revisar y depurar el código y el informe; el equipo lo revisó y probó. [PENDIENTE: el equipo debe precisar qué partes escribió o modificó cada integrante.]
+Claude Code ayudó a generar, integrar, revisar y depurar el código, el informe y la documentación; el equipo lo revisó y probó. Aportes de cada integrante mediante commits y Pull Requests propios:
+- Santiago: integración, configuración, métricas y documentación.
+- Fabian: interfaz Streamlit y experiencia de usuario.
+- Jesus: simulación y generación de demanda.
+- Said: lógica y validación de agentes.
 
 ## 16. Dónde está cada función importante
 | Qué | Archivo | Línea |
