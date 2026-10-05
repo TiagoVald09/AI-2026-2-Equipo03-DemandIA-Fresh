@@ -45,9 +45,9 @@ with st.sidebar:
     costo_produccion = st.number_input("Costo de producción por unidad", min_value=0.0,
                                        value=POR_DEFECTO.costo_produccion, step=0.5)
     costo_desperdicio = st.number_input("Costo por unidad desperdiciada", min_value=0.0,
-                                        value=POR_DEFECTO.costo_desperdicio, step=0.5)
+                                        value=POR_DEFECTO.costo_desperdicio, step=0.5, help="Costo adicional generado por cada unidad que queda sin vender.")
     penalizacion = st.number_input("Penalización por venta perdida", min_value=0.0,
-                                   value=POR_DEFECTO.penalizacion_venta_perdida, step=0.5)
+                                   value=POR_DEFECTO.penalizacion_venta_perdida, step=0.5, help="Costo asociado a no poder atender una unidad demandada.")
 
     st.subheader("Demanda y simulación")
     demanda_media = st.slider("Demanda promedio (unidades/día)", 20, 300,
@@ -105,7 +105,9 @@ k1, k2, k3, k4 = st.columns(4)
 k1.metric("🏆 Estrategia ganadora", ganador)
 k2.metric("Mayor utilidad acumulada", f"S/ {mejor_utilidad:,.0f}",
           delta=f"{mejor_utilidad - metricas.loc['Base', 'Utilidad neta acumulada']:,.0f} vs Base",
+
           help="La estrategia ganadora es la de mayor utilidad neta acumulada.")
+
 k3.metric("Menor desperdicio", menor_desperdicio,
           delta=f"{metricas.loc[menor_desperdicio, 'Desperdicio total']:,.0f} unidades",
           delta_color="off")
