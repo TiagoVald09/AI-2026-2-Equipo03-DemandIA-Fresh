@@ -88,23 +88,7 @@ if ejecutar or "resultado" not in st.session_state:
 
 res = st.session_state["resultado"]
 p_usado, df, validacion = res["p"], res["df"], res["validacion"]
-
-# ----------------- FILTRADO METODOLÓGICO SOLICITADO POR EL PROFESOR -----------------
-# Se descarta el Día 1 para el Reactivo (empieza Día 2) y Días 1 al 6 para Utilidad (empieza Día 7)
-condicion_base = df["estrategia"] == "Base"
-condicion_reactivo = (df["estrategia"] == "Reactivo") & (df["dia"] >= 2)
-condicion_utilidad = (df["estrategia"] == "Utilidad") & (df["dia"] >= 7)
-
-df_filtrado = df[condicion_base | condicion_reactivo | condicion_utilidad].copy()
-
-# Recalculamos acumulados del DataFrame filtrado para gráficos coherentes
-for estr in ESTRATEGIAS:
-    mask = df_filtrado["estrategia"] == estr
-    if mask.any():
-        df_filtrado.loc[mask, "utilidad_acumulada"] = df_filtrado.loc[mask, "utilidad_neta"].cumsum()
-
-# Calculamos métricas y ganador sobre el DataFrame filtrado
-metricas = calcular_metricas_finales(df_filtrado)
+metricas = calcular_metricas_finales(df)
 ganador = estrategia_ganadora(metricas)
 
 if p != p_usado or n_corridas != res["n_corridas"]:
@@ -121,6 +105,7 @@ k1, k2, k3, k4 = st.columns(4)
 k1.metric("🏆 Estrategia ganadora", ganador)
 k2.metric("Mayor utilidad acumulada", f"S/ {mejor_utilidad:,.0f}",
           delta=f"{mejor_utilidad - metricas.loc['Base', 'Utilidad neta acumulada']:,.0f} vs Base",
+
           help="La estrategia ganadora es la de mayor utilidad neta acumulada.")
 
 k3.metric("Menor desperdicio", menor_desperdicio,
@@ -151,7 +136,7 @@ st.dataframe(
         "Producción total": "{:,.0f}", "Unidades vendidas": "{:,.0f}"}),
     hide_index=True, width="stretch")
 st.caption("Las tres estrategias enfrentan exactamente la misma demanda. "
-           "Gana la de mayor utilidad neta acumulada (Reactivo desde Día 2, Utilidad desde Día 7).")
+           "Gana la de mayor utilidad neta acumulada.")
 
 # ------------------------------ Gráficos ------------------------------
 g1, g2 = st.columns(2)
@@ -159,7 +144,7 @@ g1, g2 = st.columns(2)
 with g1:
     fig1 = go.Figure()
     for estrategia in ESTRATEGIAS:
-        d = df_filtrado[df_filtrado["estrategia"] == estrategia]
+        d = df[df["estrategia"] == estrategia]
         fig1.add_trace(go.Scatter(x=d["dia"], y=d["utilidad_acumulada"], mode="lines",
                                   name=estrategia,
                                   line=dict(color=COLORES[estrategia], width=3)))
@@ -171,7 +156,7 @@ with g1:
 with g2:
     elegida = st.radio("Estrategia a mostrar", ESTRATEGIAS,
                        index=ESTRATEGIAS.index("Utilidad"), horizontal=True)
-    d = df_filtrado[df_filtrado["estrategia"] == elegida]
+    d = df[df["estrategia"] == elegida]
     fig2 = go.Figure()
     fig2.add_trace(go.Scatter(x=d["dia"], y=d["demanda"], mode="lines+markers",
                               name="Demanda real", line=dict(color="#264653")))
@@ -197,7 +182,7 @@ with st.expander("🧠 ¿Cómo decide cada estrategia?"):
     st.markdown(f"""
 **Base** — Siempre produce la misma cantidad ({p_usado.produccion_base} unidades por día).
 
-**Reactivo simple** — Responde al comportamiento del día anterior mediante reglas IF-THEN (evaluado a partir del Día 2):
+**Reactivo simple** — Responde al comportamiento del día anterior mediante reglas IF-THEN:
 - Si vendió **≥ {UMBRAL_SUBIR:.0%}** de lo producido → produce **{AJUSTE_REACTIVO:.0%} más**.
 - Si vendió **≤ {UMBRAL_BAJAR:.0%}** de lo producido → produce **{AJUSTE_REACTIVO:.0%} menos**.
 - En otro caso → mantiene la producción.
@@ -206,7 +191,7 @@ with st.expander("🧠 ¿Cómo decide cada estrategia?"):
 **Utilidad** — Evalúa varias cantidades posibles (de {p_usado.min_produccion} a
 {p_usado.max_produccion}, de {PASO_CANDIDATOS} en {PASO_CANDIDATOS}) frente a las demandas de
 los últimos {VENTANA_HISTORIAL} días, calcula la utilidad esperada de cada una y selecciona
-aquella que **maximiza la utilidad esperada** (evaluado a partir del Día 7).
+aquella que **maximiza la utilidad esperada**.
 
 **Utilidad del día** = ventas × precio − producción × costo de producción
 − desperdicio × costo de desperdicio − ventas perdidas × penalización.
@@ -222,4 +207,12 @@ with st.expander(f"🔁 Validación con {res['n_corridas']} semillas distintas")
         "Corridas ganadas (%)": "{:.1f}%"}), width="stretch")
 
 with st.expander("📅 Ver datos diarios"):
+    # Solo visualización: se ocultan los días de arranque de cada agente
+    # (Reactivo: día 1; Utilidad: días 1 a 6). No afecta KPIs ni resultados.
+    df_filtrado = df[
+        ~((df["estrategia"] == "Reactivo") & (df["dia"] < 2))
+        & ~((df["estrategia"] == "Utilidad") & (df["dia"] < 7))
+    ]
+    st.caption("Se ocultan los días de arranque: Reactivo (día 1) y Utilidad (días 1 a 6). "
+               "Los KPIs, la tabla comparativa y los gráficos siguen usando todos los días.")
     st.dataframe(df_filtrado, hide_index=True, width="stretch")
