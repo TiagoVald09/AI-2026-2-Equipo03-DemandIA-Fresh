@@ -71,13 +71,17 @@ def ejecutar_simulacion(p, demanda=None):
     df["utilidad_acumulada"] = df.groupby("estrategia")["utilidad"].cumsum()
     return df
 
-
+    # Mantener este orden de generación aleatoria permite reproducir
+    # exactamente el mismo escenario cuando se utiliza la misma semilla.
 def ejecutar_multiples_corridas(p, n_corridas=30):
     """Repite la comparación con semillas consecutivas (seed, seed+1, ...).
 
     Sirve para ver si el resultado depende de una sola secuencia de demanda.
     Devuelve la tabla resumen por estrategia.
     """
+      if n_corridas < 1:
+        raise ValueError("El número de corridas debe ser al menos 1.")
+          
     filas = []
     for i in range(n_corridas):
         p_i = replace(p, seed=p.seed + i)
