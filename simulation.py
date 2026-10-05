@@ -79,7 +79,7 @@ def ejecutar_multiples_corridas(p, n_corridas=30):
     Sirve para ver si el resultado depende de una sola secuencia de demanda.
     Devuelve la tabla resumen por estrategia.
     """
-      if n_corridas < 1:
+    if n_corridas < 1:
         raise ValueError("El número de corridas debe ser al menos 1.")
           
     filas = []
