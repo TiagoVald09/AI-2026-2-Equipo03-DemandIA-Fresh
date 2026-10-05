@@ -31,7 +31,7 @@ Simulación real con valores por defecto (30 días, semilla 42, demanda promedio
 | Reactivo | S/ 21,619 | 505 | 28 | 99.2 % | 3,793 |
 | **Utilidad (ganador)** | **S/ 22,488** | 186 | 182 | 94.5 % | 3,320 |
 
-Datos sintéticos; los resultados principales y la validación se resumen en este README y en la aplicación.
+Datos sintéticos; los resultados principales se resumen en este README y la validación con 30 semillas se encuentra disponible en la aplicación.
 
 ## Cómo ejecutar localmente
 
