@@ -31,7 +31,7 @@ def decidir_base(p):
 # ---------------------------------------------------------------------------
 def decidir_reactivo(produccion_ayer, ventas_ayer, p):
 
-        if ventas_ayer is None:
+    if ventas_ayer is None:
         raise ValueError(
             "Las ventas del día anterior son obligatorias si existe una producción anterior."
         )
