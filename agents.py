@@ -31,6 +31,17 @@ def decidir_base(p):
 # ---------------------------------------------------------------------------
 def decidir_reactivo(produccion_ayer, ventas_ayer, p):
 
+    
+    """Reglas condición-acción sobre el porcentaje vendido ayer.
+
+    Si vendió >= 95% de lo producido -> produce 10% más
+    Si vendió <= 75% de lo producido -> produce 10% menos
+    En otro caso                     -> mantiene
+    El primer día (sin "ayer") parte de la producción base.
+    """
+    if produccion_ayer is None:
+        return limitar_produccion(p.produccion_base, p)
+
     if ventas_ayer is None:
         raise ValueError(
             "Las ventas del día anterior son obligatorias si existe una producción anterior."
@@ -45,16 +56,6 @@ def decidir_reactivo(produccion_ayer, ventas_ayer, p):
         raise ValueError(
             "Las ventas del día anterior no pueden superar la producción."
         )
-    """Reglas condición-acción sobre el porcentaje vendido ayer.
-
-    Si vendió >= 95% de lo producido -> produce 10% más
-    Si vendió <= 75% de lo producido -> produce 10% menos
-    En otro caso                     -> mantiene
-    El primer día (sin "ayer") parte de la producción base.
-    """
-    if produccion_ayer is None:
-        return limitar_produccion(p.produccion_base, p)
-        
 
     porcentaje_vendido = ventas_ayer / produccion_ayer if produccion_ayer > 0 else 1.0
 
