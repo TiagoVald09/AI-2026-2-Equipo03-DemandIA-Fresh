@@ -30,6 +30,21 @@ def decidir_base(p):
 # 2) AGENTE REACTIVO SIMPLE: percibe solo el día anterior
 # ---------------------------------------------------------------------------
 def decidir_reactivo(produccion_ayer, ventas_ayer, p):
+
+        if ventas_ayer is None:
+        raise ValueError(
+            "Las ventas del día anterior son obligatorias si existe una producción anterior."
+        )
+
+    if produccion_ayer < 0 or ventas_ayer < 0:
+        raise ValueError(
+            "La producción y las ventas del día anterior no pueden ser negativas."
+        )
+
+    if ventas_ayer > produccion_ayer:
+        raise ValueError(
+            "Las ventas del día anterior no pueden superar la producción."
+        )
     """Reglas condición-acción sobre el porcentaje vendido ayer.
 
     Si vendió >= 95% de lo producido -> produce 10% más
@@ -39,6 +54,7 @@ def decidir_reactivo(produccion_ayer, ventas_ayer, p):
     """
     if produccion_ayer is None:
         return limitar_produccion(p.produccion_base, p)
+        
 
     porcentaje_vendido = ventas_ayer / produccion_ayer if produccion_ayer > 0 else 1.0
 
